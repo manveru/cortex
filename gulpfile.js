@@ -6,17 +6,15 @@ var gulp = require("gulp"),
     streamify = require("gulp-streamify"),
     rename = require("gulp-rename"),
     react = require("gulp-react"),
+    babel = require('gulp-babel'),
     to5ify = require('babelify'),
     jasmine = require("gulp-jasmine");
     derequire = require('gulp-derequire');
 
 gulp.task("scripts", function() {
-  browserify({entries: "./src/cortex.js", standalone: 'cortex'})
-    .transform(to5ify)
-    .bundle()
+  gulp.src(["./src/**/*.js"])
+    .pipe(babel())
     .on("error", gutil.log.bind(gutil, 'Browserify Error'))
-    .pipe(source("cortex.js"))
-    .pipe(derequire())
     .pipe(gulp.dest("./build"))
     .pipe(streamify(uglify()))
     .pipe(rename("cortex.min.js"))
